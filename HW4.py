@@ -10,7 +10,7 @@ for ch1 in vowel:
     for ch2 in vowel:
         list2.append(ch1 + ch2)
 
-user_str = input('введіть рядок українською мовою --> ')
+user_str = input('Введіть рядок українською мовою --> ')
 my_str = user_str.casefold()
 my_str = my_str.replace(' - ', ' ')
 for char in ".,+=":
@@ -48,20 +48,20 @@ store_price = {'cito':        47.999,
                'store':       37.720,
                'rozetka':     38.003}
 suitable_stores = ''
-lower_str = input('введіть мінімальну ціну --> ')
-upper_str = input('введіть максимальну ціну --> ')
+lower_str = input('Введіть мінімальну ціну --> ')
+upper_str = input('Введіть максимальну ціну --> ')
 
 try:
     lower = float(lower_str)
 except Exception:
     lower = None
-    print('мінімальна ціна не є числом')
+    print('Мінімальна ціна не є числом')
 
 try:
     upper = float(upper_str)
 except Exception:
     upper = None
-    print('максимальна ціна не є числом')
+    print('Максимальна ціна не є числом')
 
 if (not lower is None) and (not upper is None):
     for key, value in store_price.items():
@@ -69,6 +69,6 @@ if (not lower is None) and (not upper is None):
             suitable_stores += '"' + key + '"'
     suitable_stores = suitable_stores.replace('""', '", "')
     if len(suitable_stores)>0:
-        print(f'Відповіді магазини: {suitable_stores}')
+        print(f'Відповідні магазини: {suitable_stores}')
     else:
         print('Немає відповідних магазинів')

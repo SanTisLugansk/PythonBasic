@@ -38,5 +38,3 @@ str1 = "Hello "
 str2 = "world"
 concat_str = str1 + str2
 print(concat_str)
-
-
