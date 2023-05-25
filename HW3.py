@@ -35,11 +35,10 @@ print('')
 # вважаємо що символи '.' , ',' , '+' , '=' , послідовність символів ' - ' також, як і будь-який пробіл є роздільниками слів
 
 user_str = input('Enter a string --> ')
-my_str = user_str.replace('.', ' ')
-my_str = my_str.replace(',', ' ')
-my_str = my_str.replace(' - ', ' ')
-my_str = my_str.replace('+', ' ')
-my_str = my_str.replace('=', ' ')
+my_str = user_str.replace(' - ', ' ')
+for char in ".,+=":
+  my_str = my_str.replace(char, " ")
+
 user_list = my_str.split()
 print(f'There are {len(user_list)} words in the string \'{user_str}\'')
 print('')
