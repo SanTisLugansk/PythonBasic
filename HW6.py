@@ -1,9 +1,51 @@
 # 1. Напишіть функцію, що приймає один аргумент будь-якого типу та повертає цей аргумент, перетворений на float.
 #    Якщо перетворити не вдається функція має повернути 0.
+
+def  my_float(num):
+    try:
+        return float(num)
+    except Exception:
+        return 0
+
+str1 = input('Введіть щось --> ')
+print(my_float(str1))
+
+
 # 2. Напишіть функцію, що приймає два аргументи. Функція повинна
 #    a. якщо аргументи відносяться до числових типів (int, float) - повернути перемножене значення цих аргументів,
 #    b. якщо обидва аргументи це строки (str) - обʼєднати в одну строку та повернути
 #    c. у будь-якому іншому випадку повернути кортеж з цих аргументів
+
+# input() завжди повертає str, тому створимо функцію для визначення типу введених даних
+def cast_to_type(str_arg):
+    if str_arg == 'None':
+        return None
+    elif str_arg == 'True':
+        return True
+    elif str_arg == 'False':
+        return False
+    else:
+        try:
+            return int(str_arg)
+        except Exception:
+            try:
+                return float(str_arg)
+            except Exception:
+                return str_arg
+
+def two_arguments(arg1, arg2):
+    if (type(arg1) == int or type(arg1) == float) and (type(arg2) == int or type(arg2) == float):
+        return arg1 * arg2
+    elif type(arg1) == str and type(arg2) == str:
+        return arg1+arg2
+    else:
+        return (arg1, arg2)
+
+str2 = input('Введіть ще щось --> ')
+
+print(two_arguments(cast_to_type(str1), arg2=cast_to_type(str2)))
+
+
 # 3. Перепишіть за допомогою функцій вашу программу "Касир в кінотеатрі", яка буде виконувати наступне:
 #    a. Попросіть користувача ввести свсвій вік.
 #       - якщо користувачу менше 7 - вивести "Тобі ж <> <>! Де твої батьки?"
@@ -17,6 +59,5 @@
 #       Наприклад:  "Тобі ж 5 років! Де твої батьки?"
 #                   "Вам 81 рік? Покажіть пенсійне посвідчення!"
 #                   "Незважаючи на те, що вам 42 роки, білетів всеодно нема!"
-
 
 
