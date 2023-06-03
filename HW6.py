@@ -60,4 +60,49 @@ print(two_arguments(cast_to_type(str1), arg2=cast_to_type(str2)))
 #                   "Вам 81 рік? Покажіть пенсійне посвідчення!"
 #                   "Незважаючи на те, що вам 42 роки, білетів всеодно нема!"
 
+def input_age():
+    age_str = input('Вкажіть Ваш вік: ')
+    age_str_no_point = age_str.replace('.', '')
 
+    if age_str.count('.') > 1:
+        print('Введено не коректне значення віку')
+    elif age_str.find('-') == 0 and age_str_no_point[1:].isdigit():
+        print('Вік не може бути від\'ємним')
+    elif not age_str_no_point.isdigit():  # elif age_str_no_point.isdigit() == False:
+        print('Необхідно ввести число')
+    else:
+        age_float = float(age_str)
+        age = int(age_float)
+        if age > 130:
+            print('Вік не може бути більшим за 130 років')
+        else:
+            return age
+    return None
+
+def correct_form_word(num):
+    Modulus = num%10
+    if Modulus == 1:
+        return 'рік'
+    elif Modulus == 2 or Modulus == 3 or Modulus == 4:
+        return 'роки'
+    else:
+        return 'років'
+
+def display_message(age):
+    if age is None:
+        return
+    else:
+        message_age = str(age) + ' ' + correct_form_word(age)
+        if str(age).find('7') >= 0:
+            print(f'Вам {message_age}, вам пощастить')
+        elif age < 7:
+            print(f'Тобі ж {message_age}! Де твої батьки?')
+        elif age < 16:
+            print(f'Тобі лише {message_age}, а це е фільм для дорослих!')
+        elif age > 65:
+            print(f'Вам {message_age}? Покажіть пенсійне посвідчення!')
+        else:
+            print(f'Незважаючи на те, що вам {message_age}, білетів всеодно нема!')
+
+numeric = input_age()
+display_message(numeric)
