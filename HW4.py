@@ -16,9 +16,8 @@ my_str = my_str.replace(' - ', ' ')
 for char in ".,+=":
     my_str = my_str.replace(char, " ")
 
-my_str = my_str.replace('#', '%') # замінюємо у рядку всі символи '#'
 for char in vowel:
-    my_str = my_str.replace(char, '#') # замінюємо всі голосні на '#'
+    my_str = my_str.replace(char, 'і') # замінюємо всі голосні на 'і'
 
 words_count = 0
 user_list = my_str.split()
@@ -29,7 +28,7 @@ for item in user_list:
     #     if item.find(vowel2) >= 0:
     #         words_count += 1
     #         break
-    if item.find('##') >= 0:
+    if item.find('іі') >= 0:
         words_count += 1
 
 print(f'Кількість слів у рядку \'{user_str}\', що містять дві або більше голосних поспіль дорівнює {words_count}')
