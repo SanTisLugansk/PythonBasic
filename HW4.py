@@ -5,10 +5,10 @@
 
 vowel = 'аоуіиеяюєї'
 
-list2 = []
-for ch1 in vowel:
-    for ch2 in vowel:
-        list2.append(ch1 + ch2)
+# list2 = []
+# for ch1 in vowel:
+#     for ch2 in vowel:
+#         list2.append(ch1 + ch2)
 
 user_str = input('Введіть рядок українською мовою --> ')
 my_str = user_str.casefold()
@@ -16,15 +16,21 @@ my_str = my_str.replace(' - ', ' ')
 for char in ".,+=":
     my_str = my_str.replace(char, " ")
 
+my_str = my_str.replace('#', '%') # замінюємо у рядку всі символи '#'
+for char in vowel:
+    my_str = my_str.replace(char, '#') # замінюємо всі голосні на '#'
+
 words_count = 0
 user_list = my_str.split()
 for item in user_list:
     if len(item) < 2:
         continue
-    for vowel2 in list2:
-        if item.find(vowel2) >= 0:
-            words_count += 1
-            break
+    # for vowel2 in list2:
+    #     if item.find(vowel2) >= 0:
+    #         words_count += 1
+    #         break
+    if item.find('##') >= 0:
+        words_count += 1
 
 print(f'Кількість слів у рядку \'{user_str}\', що містять дві або більше голосних поспіль дорівнює {words_count}')
 print('')
