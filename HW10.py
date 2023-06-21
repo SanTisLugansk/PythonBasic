@@ -2,13 +2,13 @@
 #    наслідувані від "Транспортний засіб". Наповніть класи атрибутами на свій розсуд.
 # 2. Створіть обʼєкти класів "Автомобіль", "Літак", "Корабель".
 
-class vehicle:
+class Vehicle:
     weight = None
     max_speed = None
     engine_power = None
     _owner = None
 
-class Car(vehicle):
+class Car(Vehicle):
     color = None
     __is_electric = False
 
@@ -19,11 +19,11 @@ class Car(vehicle):
     def get_is_electric(self):
         return self.__is_electric
 
-class Airplane(vehicle):
+class Airplane(Vehicle):
     maximum_height = None
     range_of_flight = None
 
-class Ship(vehicle):
+class Ship(Vehicle):
     displacement = None
 
     def __init__(self, weight, max_speed, engine_power, owner=None):
