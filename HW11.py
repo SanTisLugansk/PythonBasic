@@ -11,57 +11,67 @@
 
 import math
 
+
 class Point:
-    x_coord = 0
-    y_coord = 0
+    x = 0
+    y = 0
 
     def __init__(self, x, y):
-        # check type (int, float)
-        self.x_coord = x
-        self.y_coord = y
-
-    def __str__(self):
-        return f'Point {self.x_coord} {self.y_coord}'
-
-    def __getitem__(self, item):
-        print(f'__getitem__ {item}')
-        if item == 0:
-            return self.x_coord
-        elif item == 1:
-            return self.y_coord
+        if isinstance(x, (float, int)) and isinstance(y, (float, int)):
+            self.x = x
+            self.y = y
         else:
             raise TypeError
 
+    def __str__(self):
+        return f'Point({self.x}, {self.y})'
+
+    def __getitem__(self, item):
+        print(f'__getitem__ {item}')
+        if isinstance(item, int):
+            if item == 0:
+                return self.x
+            elif item == 1:
+                return self.y
+        raise TypeError
+
     def __setitem__(self, item, value):
         print(f'__setitem__ {item}, {value}')
-        if item == 0:
-            self.x_coord = value
-        elif item == 1:
-            self.y_coord = value
+        if isinstance(item, int) and isinstance(value, (float, int)):
+            if item == 0:
+                self.x = value
+            elif item == 1:
+                self.y = value
+            else:
+                raise TypeError
         else:
             raise TypeError
 
     def __eq__(self, other):
-        # check type Point
-        return self.x_coord == other.x_coord and self.y_coord == other.y_coord
+        if isinstance(other, Point):
+            return self.x == other.x and self.y == other.y
+        else:
+            raise TypeError
 
 
 class Line:
-    begin_point = None
-    end_point = None
+    begin = None
+    end = None
 
     def __init__(self, begin, end):
-        # check type Point
-        self.begin_point = begin
-        self.end_point = end
+        if isinstance(begin, Point) and isinstance(end, Point):
+            self.begin = begin
+            self.end = end
 
     def __str__(self):
-        return f'Line from [{self.begin_point}] to [{self.end_point}]'
+        return f'Line({self.begin} - {self.end})'
 
-    def length(self):
-        k1 = self.begin_point.x_coord - self.end_point.x_coord
-        k2 = self.begin_point.y_coord - self.end_point.y_coord
-        return math.sqrt(k1 ** 2 + k2 ** 2)
+    def length(self, round_to=None):
+        result = math.dist([self.begin.x, self.begin.y], [self.end.x, self.end.y])
+        if isinstance(round_to, int):
+            return round(result, round_to)
+        else:
+            return result
 
     def __len__(self):
         """ len(obj) """
@@ -70,14 +80,48 @@ class Line:
     def __contains__(self, item):
         """ a in b """
         print('__contains__', item)
-        return self.begin_point == item or self.end_point == item
+        if isinstance(item, Point):
+            return self.begin == item or self.end == item
+        else:
+            raise TypeError
 
 
-a = 4
-b = 13
-c = 15
+class Triangle:
+    apex_a = None
+    apex_b = None
+    apex_c = None
 
-s = (a + b + c) / 2
-A = math.sqrt(s * (s - a) * (s - b) * (s - c))
+    def __init__(self, a, b, c):
+        if isinstance(a, Point) and isinstance(b, Point) and isinstance(c, Point):
+            self.apex_a = a
+            self.apex_b = b
+            self.apex_c = c
 
-print(A)
+    def area(self, round_to=None):
+        ab = Line(self.apex_a, self.apex_b).length()
+        bc = Line(self.apex_b, self.apex_c).length()
+        ca = Line(self.apex_c, self.apex_a).length()
+        s = (ab + bc + ca) / 2
+        result = math.sqrt(s * (s - ab) * (s - bc) * (s - ca))
+        if isinstance(round_to, int):
+            return round(result, round_to)
+        else:
+            return result
+
+
+p1 = Point(0, 0)
+p2 = Point(0, 13)
+p3 = Point(3.693, 14.539)
+# print(p1, p2, p3)
+
+a = Line(p1, p2)    # 13
+b = Line(p2, p3)    # 4
+c = Line(p3, p1)    # 15
+# print(a, b, c)
+
+print(a.length(2), b.length(2), c.length(2))
+
+almost_triangle_Heron = Triangle(p1, p2, p3)
+
+print(almost_triangle_Heron.area(2))
+
