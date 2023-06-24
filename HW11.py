@@ -15,11 +15,12 @@ import math
 class Point:
     x = 0
     y = 0
+    # не бажано використовувати однолітерні атрибути, але в завданні вказано 'атрибути x та y'
 
-    def __init__(self, x, y):
-        if isinstance(x, (float, int)) and isinstance(y, (float, int)):
-            self.x = x
-            self.y = y
+    def __init__(self, arg_x, arg_y):
+        if isinstance(arg_x, (float, int)) and isinstance(arg_y, (float, int)):
+            self.x = arg_x
+            self.y = arg_y
         else:
             raise TypeError
 
@@ -60,7 +61,7 @@ class Point:
         return [self.x, self.y]
     # хотілося за допомогою MAGIC METHOD зробити так, щоб вираз '[объект_класса_Point]' повертав '[x, y]',
     # тобто, щоб при створенні списку з об'єкта класу Point,
-    # створювався список, що містить координати x і y цього об'єкта, але не вийшло
+    # створювався список, що містить координати x і y цього об'єкта, але не вийшло (не знаю як)
 
 
 class Line:
@@ -98,11 +99,11 @@ class Triangle:
     apex_b = None
     apex_c = None
 
-    def __init__(self, a, b, c):
-        if isinstance(a, Point) and isinstance(b, Point) and isinstance(c, Point):
-            self.apex_a = a
-            self.apex_b = b
-            self.apex_c = c
+    def __init__(self, arg_apex_a, arg_apex_b, arg_apex_c):
+        if isinstance(arg_apex_a, Point) and isinstance(arg_apex_b, Point) and isinstance(arg_apex_c, Point):
+            self.apex_a = arg_apex_a
+            self.apex_b = arg_apex_b
+            self.apex_c = arg_apex_c
         else:
             raise TypeError
 
