@@ -35,7 +35,8 @@ class Point:
                 return self.y
             else:
                 raise IndexError
-        raise TypeError
+        else:
+            raise TypeError
 
     def __setitem__(self, item, value):
         print(f'__setitem__ {item}, {value}')
