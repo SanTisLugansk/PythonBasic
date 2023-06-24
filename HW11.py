@@ -111,6 +111,8 @@ class Triangle:
         return f'Triangle with apex: {self.apex_a}, {self.apex_b}, {self.apex_c}'
 
     def area(self, round_to=None):
+        # короткочасні змінні можуть мати імена з однієї або двох літер, це говорить про 'тимчасовість' змінної,
+        # формула площі читаеється легше при використанні коротких імен
         ab = Line(self.apex_a, self.apex_b).length()
         bc = Line(self.apex_b, self.apex_c).length()
         ca = Line(self.apex_c, self.apex_a).length()
@@ -127,9 +129,9 @@ p2 = Point(0, 13)
 p3 = Point(3.693, 14.539)
 # print(p1, p2, p3)
 
-a = Line(p1, p2)    # 13
-b = Line(p2, p3)    # 4
-c = Line(p3, p1)    # 15
+# a = Line(p1, p2)    # 13
+# b = Line(p2, p3)    # 4
+# c = Line(p3, p1)    # 15
 # print(a, b, c)
 # print(a.length(2), b.length(2), c.length(2))
 
