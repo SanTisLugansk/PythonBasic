@@ -33,6 +33,8 @@ class Point:
                 return self.x
             elif item == 1:
                 return self.y
+            else:
+                raise IndexError
         raise TypeError
 
     def __setitem__(self, item, value):
@@ -43,7 +45,7 @@ class Point:
             elif item == 1:
                 self.y = value
             else:
-                raise TypeError
+                raise IndexError
         else:
             raise TypeError
 
@@ -52,6 +54,12 @@ class Point:
             return self.x == other.x and self.y == other.y
         else:
             raise TypeError
+
+    def list(self):
+        return [self.x, self.y]
+    # хотілося за допомогою MAGIC METHOD зробити так, щоб вираз '[объект_класса_Point]' повертав '[x, y]',
+    # тобто, щоб при створенні списку з об'єкта класу Point,
+    # створювався список, що містить координати x і y цього об'єкта, але не вийшло
 
 
 class Line:
@@ -62,20 +70,18 @@ class Line:
         if isinstance(begin, Point) and isinstance(end, Point):
             self.begin = begin
             self.end = end
+        else:
+            raise TypeError
 
     def __str__(self):
         return f'Line({self.begin} - {self.end})'
 
     def length(self, round_to=None):
-        result = math.dist([self.begin.x, self.begin.y], [self.end.x, self.end.y])
+        result = math.dist(self.begin.list(), self.end.list())
         if isinstance(round_to, int):
             return round(result, round_to)
         else:
             return result
-
-    def __len__(self):
-        """ len(obj) """
-        return 2
 
     def __contains__(self, item):
         """ a in b """
@@ -96,6 +102,11 @@ class Triangle:
             self.apex_a = a
             self.apex_b = b
             self.apex_c = c
+        else:
+            raise TypeError
+
+    def __str__(self):
+        return f'Triangle with apex: {self.apex_a}, {self.apex_b}, {self.apex_c}'
 
     def area(self, round_to=None):
         ab = Line(self.apex_a, self.apex_b).length()
@@ -118,10 +129,7 @@ a = Line(p1, p2)    # 13
 b = Line(p2, p3)    # 4
 c = Line(p3, p1)    # 15
 # print(a, b, c)
-
-print(a.length(2), b.length(2), c.length(2))
+# print(a.length(2), b.length(2), c.length(2))
 
 almost_triangle_Heron = Triangle(p1, p2, p3)
-
-print(almost_triangle_Heron.area(2))
-
+print(f'Area {almost_triangle_Heron} = {almost_triangle_Heron.area(3)}')
