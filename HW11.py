@@ -123,17 +123,17 @@ class Triangle:
         else:
             return result
 
+if __name__ == '__main__':
+    p1 = Point(0, 0)
+    p2 = Point(0, 13)
+    p3 = Point(3.693, 14.539)
+    # print(p1, p2, p3)
 
-p1 = Point(0, 0)
-p2 = Point(0, 13)
-p3 = Point(3.693, 14.539)
-# print(p1, p2, p3)
+    # a = Line(p1, p2)    # 13
+    # b = Line(p2, p3)    # 4
+    # c = Line(p3, p1)    # 15
+    # print(a, b, c)
+    # print(a.length(2), b.length(2), c.length(2))
 
-# a = Line(p1, p2)    # 13
-# b = Line(p2, p3)    # 4
-# c = Line(p3, p1)    # 15
-# print(a, b, c)
-# print(a.length(2), b.length(2), c.length(2))
-
-almost_triangle_Heron = Triangle(p1, p2, p3)
-print(f'Area {almost_triangle_Heron} = {almost_triangle_Heron.area(3)}')
+    almost_triangle_Heron = Triangle(p1, p2, p3)
+    print(f'Area {almost_triangle_Heron} = {almost_triangle_Heron.area(3)}')
