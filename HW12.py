@@ -145,4 +145,3 @@ for i in my_triangle:
     print(i)
     for j in my_triangle:
         print(f' --- inner loop --- {j}')
-
