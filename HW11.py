@@ -9,7 +9,7 @@
 #    s = (a + b + c) / 2
 #    A = sqrt (s * (s - a) * (s - b) * (s - c))
 
-import math
+from math import dist, sqrt
 
 
 class Point:
@@ -57,6 +57,13 @@ class Point:
         else:
             raise TypeError
 
+    def __ne__(self, other):
+        # print(f'Point __ne__ type(other) =', type(other))
+        if isinstance(other, Point):
+            return self.x != other.x or self.y != other.y
+        else:
+            raise TypeError
+
     def list(self):
         return [self.x, self.y]
     # хотілося за допомогою MAGIC METHOD зробити так, щоб вираз '[объект_класса_Point]' повертав '[x, y]',
@@ -79,7 +86,7 @@ class Line:
         return f'Line({self.begin} - {self.end})'
 
     def length(self, round_to=None):
-        result = math.dist(self.begin.list(), self.end.list())
+        result = dist(self.begin.list(), self.end.list())
         if isinstance(round_to, int):
             return round(result, round_to)
         else:
@@ -117,7 +124,7 @@ class Triangle:
         bc = Line(self.apex_b, self.apex_c).length()
         ca = Line(self.apex_c, self.apex_a).length()
         s = (ab + bc + ca) / 2
-        result = math.sqrt(s * (s - ab) * (s - bc) * (s - ca))
+        result = sqrt(s * (s - ab) * (s - bc) * (s - ca))
         if isinstance(round_to, int):
             return round(result, round_to)
         else:
