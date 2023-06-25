@@ -4,7 +4,8 @@
 
 
 from math import sqrt
-from HW11 import Point as Point, Line
+# from HW11 import Point as Point, Line as Line
+from HW11 import Point, Line
 
 
 class Triangle:
@@ -18,7 +19,7 @@ class Triangle:
     apex_b = property()
     apex_c = property()
 
-    current_apex = None
+    current_apex = None     # у остаточній версії не використовується
 
     @apex_a.getter
     def apex_a(self):
