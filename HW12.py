@@ -4,7 +4,7 @@
 
 
 from math import sqrt
-# from HW11 import Point as Point, Line as Line
+from copy import copy
 from HW11 import Point, Line
 
 
@@ -12,14 +12,14 @@ class Triangle:
     _apex_a = Point(0, 0)
     _apex_b = Point(0, 0)
     _apex_c = Point(0, 0)
-    _changed = False
     _area = None
+    _area_apex_a = None
+    _area_apex_b = None
+    _area_apex_c = None
 
     apex_a = property()
     apex_b = property()
     apex_c = property()
-
-    current_apex = None     # у остаточній версії не використовується
 
     @apex_a.getter
     def apex_a(self):
@@ -28,9 +28,7 @@ class Triangle:
     @apex_a.setter
     def apex_a(self, value):
         if isinstance(value, Point):
-            if self._apex_a != value:
-                self._apex_a = value
-                self._changed = True
+            self._apex_a = value
         else:
              raise TypeError
 
@@ -41,9 +39,7 @@ class Triangle:
     @apex_b.setter
     def apex_b(self, value):
         if isinstance(value, Point):
-            if self._apex_b != value:
-                self._apex_b = value
-                self._changed = True
+            self._apex_b = value
         else:
              raise TypeError
 
@@ -54,9 +50,7 @@ class Triangle:
     @apex_c.setter
     def apex_c(self, value):
         if isinstance(value, Point):
-            if self._apex_c != value:
-                self._apex_c = value
-                self._changed = True
+            self._apex_c = value
         else:
              raise TypeError
 
@@ -68,37 +62,30 @@ class Triangle:
     def __str__(self):
         return f'Triangle with apex: {self.apex_a}, {self.apex_b}, {self.apex_c}'
 
-    # у такому вигляді працює тільки якщо немає вкладених циклів for
-    # def __iter__(self):
-    #     self.current_apex = self.__class__.current_apex
-    #     return self
-    #
-    # def __next__(self):
-    #     if id(self.current_apex) == id(self.apex_a):
-    #         self.current_apex = self.apex_b
-    #     elif id(self.current_apex) == id(self.apex_b):
-    #         self.current_apex = self.apex_c
-    #     elif id(self.current_apex) == id(self.apex_c):
-    #         raise StopIteration
-    #     else:
-    #         self.current_apex = self.apex_a
-    #
-    #     return self.current_apex
-
     def __iter__(self):
         return Triangle_iterator(self)
 
     def area(self, round_to=None):
         # короткочасні змінні можуть мати імена з однієї або двох літер, це говорить про 'тимчасовість' змінної,
         # формула площі читаеється легше при використанні коротких імен
-        if self._changed:
-            print('calculate the area')
+        is_changed = False
+        if self._apex_a != self._area_apex_a:
+            self._area_apex_a = copy(self._apex_a)
+            is_changed = True
+        if self._apex_b != self._area_apex_b:
+            self._area_apex_b = copy(self._apex_b)
+            is_changed = True
+        if self._apex_c != self._area_apex_c:
+            self._area_apex_c = copy(self._apex_c)
+            is_changed = True
+
+        if is_changed:
+            # print('calculate the area')
             ab = Line(self.apex_a, self.apex_b).length()
             bc = Line(self.apex_b, self.apex_c).length()
             ca = Line(self.apex_c, self.apex_a).length()
             s = (ab + bc + ca) / 2
             self._area = sqrt(s * (s - ab) * (s - bc) * (s - ca))
-            self._changed = False
 
         if isinstance(round_to, int):
             return round(self._area, round_to)
@@ -108,41 +95,44 @@ class Triangle:
 
 class Triangle_iterator:
     triangle = None
-    current_apex = None
+    current_apex_name = None
 
     def __init__(self, triangle):
         self.triangle = triangle
+        self.current_apex_name = None
 
     # iтератор повинен повертати self у методі __iter__
     def __iter__(self):
         return self
 
     def __next__(self):
-        if id(self.current_apex) == id(self.triangle.apex_a):
-            self.current_apex = self.triangle.apex_b
-        elif id(self.current_apex) == id(self.triangle.apex_b):
-            self.current_apex = self.triangle.apex_c
-        elif id(self.current_apex) == id(self.triangle.apex_c):
-            raise StopIteration
+        if self.current_apex_name is None:
+            self.current_apex_name = 'apex_a'
+        elif self.current_apex_name == 'apex_a':
+            self.current_apex_name = 'apex_b'
+        elif self.current_apex_name == 'apex_b':
+            self.current_apex_name = 'apex_c'
         else:
-            self.current_apex = self.triangle.apex_a
+            raise StopIteration
 
-        return self.current_apex
+        return self.triangle.__getattribute__(self.current_apex_name)
 
 
-p1 = Point(0, 2)
-p2 = Point(1, 3)
-p3 = Point(3, 9)
+p1 = Point(0, 0)
+p2 = Point(1, 8)
+p3 = Point(3, 4)
 # print(p1, p2, p3)
 
 my_triangle = Triangle(p1, p2, p3)
-print(f'Area {my_triangle} = {my_triangle.area(3)}')
-print(f'Area {my_triangle} = {my_triangle.area(3)}')
-
-my_triangle.apex_a = Point(2, 10)
 print(f'Area {my_triangle} = {my_triangle.area(3)}\n')
 
 for i in my_triangle:
     print(i)
+    i.x = i.x * 2
+    # print(f'Area {my_triangle} = {my_triangle.area(3)}')
+
     for j in my_triangle:
         print(f' --- inner loop --- {j}')
+        j.y = int(j.y / 2)
+
+    print(f'Area {my_triangle} = {my_triangle.area(3)}\n')
