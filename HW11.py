@@ -9,22 +9,23 @@
 #    s = (a + b + c) / 2
 #    A = sqrt (s * (s - a) * (s - b) * (s - c))
 
+
 from math import dist, sqrt
 
 
 class Point:
+    # не бажано використовувати однолітерні атрибути, але в завданні вказано 'атрибути x та y'
     x = 0
     y = 0
-    # не бажано використовувати однолітерні атрибути, але в завданні вказано 'атрибути x та y'
 
     def __init__(self, arg_x, arg_y):
-        if isinstance(arg_x, (float, int)) and isinstance(arg_y, (float, int)):
-            self.x = arg_x
-            self.y = arg_y
-        else:
-            raise TypeError
+        self.x = arg_x
+        self.y = arg_y
 
     def __str__(self):
+        return f'Point({self.x}, {self.y})'
+
+    def __repr__(self):
         return f'Point({self.x}, {self.y})'
 
     def __getitem__(self, item):
@@ -52,14 +53,18 @@ class Point:
             raise TypeError
 
     def __eq__(self, other):
-        if isinstance(other, Point):
+        if other is None:
+            return False
+        elif isinstance(other, Point):
             return self.x == other.x and self.y == other.y
         else:
             raise TypeError
 
     def __ne__(self, other):
         # print(f'Point __ne__ type(other) =', type(other))
-        if isinstance(other, Point):
+        if other is None:
+            return True
+        elif isinstance(other, Point):
             return self.x != other.x or self.y != other.y
         else:
             raise TypeError
@@ -130,6 +135,7 @@ class Triangle:
         else:
             return result
 
+
 if __name__ == '__main__':
     p1 = Point(0, 0)
     p2 = Point(0, 13)
@@ -144,4 +150,3 @@ if __name__ == '__main__':
 
     almost_triangle_Heron = Triangle(p1, p2, p3)
     print(f'Area {almost_triangle_Heron} = {almost_triangle_Heron.area(3)}')
-
