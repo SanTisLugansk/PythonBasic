@@ -134,8 +134,8 @@ class NBU_courses_with_raise(NBU_courses):
 
     def date_is_correct(self, element):
         date_str = element["exchangedate"]
-        date__course = datetime.strptime(date_str, '%d.%m.%Y').date()
-        return (date__course == self._date_user.date)
+        date_course = datetime.strptime(date_str, '%d.%m.%Y').date()
+        return (date_course == self._date_user.date)
 
     def date_from_headers_is_correct(self, headers):
         date_str = headers.get('Date')
