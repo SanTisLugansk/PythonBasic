@@ -125,29 +125,31 @@ class Courses_file_txt:
 
 date_courses = Date_user()
 # print(date_courses.date)
-option = 0  # 0 - print(), інше значення - raise My_error()
 
-if option == 0:
-    my_courses = NBU_courses()      # виключення обробляються всередені об'єктів
+# початковий варіант отримання рядка із курсами валют
+# my_courses = NBU_courses()
+# res_str = my_courses.get_courses(date_courses)
+# if len(res_str) > 0:
+#     str_write = f' "{date_courses.date.strftime("%d.%m.%Y")}"\n'+res_str
+#     # print(f'Str length with courses = {len(str_write)}')
+
+# варіант з генерацією і обробкою виключень, на мій погляд, краще
+my_courses = NBU_courses_with_raise()
+try:
     res_str = my_courses.get_courses(date_courses)
-    if len(res_str) > 0:
-        str_write = f' "{date_courses.date.strftime("%d.%m.%Y")}"\n'+res_str
-        # print(f'Str length with courses = {len(str_write)}')
-
-        file_courses = Courses_file_txt(date_courses)
-        # print(file_courses.name)
-        file_courses.write(str_write)
+except My_error:
+    print(f'Error: {My_error.message}')
 else:
-    my_courses = NBU_courses_with_raise()       # об'єкти генерують виключення, які орбобляються у основній програмі
-    try:
-        res_str = my_courses.get_courses(date_courses)
-    except My_error:
-        print(f'Error: {My_error.message}')
-    else:
-        str_write = f' "{date_courses.date.strftime("%d.%m.%Y")}"\n'+res_str
-        # print(f'Str length with courses = {len(str_write)}')
+    str_write = f' "{date_courses.date.strftime("%d.%m.%Y")}"\n'+res_str
+    # print(f'Str length with courses = {len(str_write)}')
 
-        file_courses = Courses_file_txt(date_courses)
-        # print(file_courses.name)
-        file_courses.write(str_write)
+    file_courses = Courses_file_txt(date_courses)
+    # print(file_courses.name)
+    file_courses.write(str_write)
+
+
+
+
+
+
 
