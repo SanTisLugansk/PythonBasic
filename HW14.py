@@ -13,8 +13,10 @@
 # P.S.  За можливості зробіть все за допомогою ООП
 
 
-import requests
-import datetime
+# import requests
+from requests import get
+# import datetime
+from datetime import datetime, timedelta
 
 
 class Date_user:
@@ -22,10 +24,13 @@ class Date_user:
     is_now = False
 
     def __init__(self):
-        date_now = datetime.datetime.now().date()
+        # 'Поточного дня буде відображатися офіційний курс гривні до іноземних валют,
+        # встановлений НА ЗАВТРА' (https://bank.gov.ua/ua/open-data/api-dev)
+        # тому додаємо один день, щоб дата у файлі відповідала датам курсів
+        date_now = datetime.now().date() + timedelta(days=1)
         date_str = input('Enter the date in the format "DD.MM.YYYY"  ---> ')
         try:
-            self.date = datetime.datetime.strptime(date_str, '%d.%m.%Y').date()
+            self.date = datetime.strptime(date_str, '%d.%m.%Y').date()
         except:
             self.date = date_now
 
@@ -51,7 +56,7 @@ class NBU_courses:
         res_json = None
 
         try:
-            res = requests.get(url, timeout=3)
+            res = get(url, timeout=3)
         except:
             print('Error getting response to "Get" request')
         else:
@@ -90,21 +95,71 @@ class My_error(Exception):
         return f'Error, {self.message}'
 
 
+# варіант з генерацією винятків, обробка яких має бути зовні
 class NBU_courses_with_raise(NBU_courses):
-    # варіант функції з генерацією винятків, обробка яких має бути зовні
+    _date_user = None
+
     def execute_request(self, url):
         try:
-            res = requests.get(url, timeout=3)
+            res = get(url, timeout=3)
         except:
             raise My_error('failed to get a response to the "Get" request')
         else:
-            if res.status_code == self._status_code_OK:
-                if res.headers.get('statusRequest') == self._statusRequest_OK:
-                    return res.json()
-                else:
-                    raise My_error(f'returned status request: \'{res.headers.get("statusRequest")}\'')
-            else:
+            if res.status_code != self._status_code_OK:
                 raise My_error(f'returned status code: \'{res.status_code}\'')
+            if res.headers.get('statusRequest') != self._statusRequest_OK:
+                raise My_error(f'returned status request: \'{res.headers.get("statusRequest")}\'')
+            # res.headers.Date - це не дата за яку отримано курси валют, тому перевірка не має сенсу
+            # if not self.date_from_headers_is_correct(res.headers):
+            #     raise My_error(f'failed to get data for \'{self._date_user.date}\'')
+
+            return res.json()
+
+    def get_courses(self, user_date: Date_user):
+        self._date_user = user_date
+        str_result = ''
+
+        url = self.get_url(user_date)
+        # print(url)
+        res_json = self.execute_request(url)
+
+        counter = 0
+        for el in res_json:
+            if self.date_is_correct(el):
+                str_result += f'{(res_json.index(el) + 1)}. {el["cc"]} to UAH: {el["rate"]}\n'
+                counter += 1
+        print(f'received {counter} courses')
+
+        return str_result
+
+    def date_is_correct(self, element):
+        date_str = element["exchangedate"]
+        date__course = datetime.strptime(date_str, '%d.%m.%Y').date()
+        return (date__course == self._date_user.date)
+
+    def date_from_headers_is_correct(self, headers):
+        date_str = headers.get('Date')
+        month_table = {'Jan': 1,
+                        'Feb': 2,
+                        'Mar': 3,
+                        'Apr': 4,
+                        'May': 5,
+                        'Jun': 6,
+                        'Jul': 7,
+                        'Aug': 8,
+                        'Sep': 9,
+                        'Oct': 10,
+                        'Nov': 11,
+                        'Dec': 12}
+        try:
+            day = int(date_str[5:7])
+            month = month_table[date_str[8:11]]
+            year = int(date_str[12:16])
+            date_from_headers = datetime(year, month, day).date()
+            print(date_from_headers)
+            return (date_from_headers == self._date_user.date)
+        except:
+            return False
 
 
 class Courses_file_txt:
@@ -146,10 +201,3 @@ else:
     file_courses = Courses_file_txt(date_courses)
     # print(file_courses.name)
     file_courses.write(str_write)
-
-
-
-
-
-
-
